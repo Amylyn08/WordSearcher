@@ -2,7 +2,7 @@ namespace WordSearch;
 
 public class WordSearcher{
     
-    private readonly ITextSource __textSource;
+    public ITextSource __textSource{get;}
 
     //representing last word searched for
     private string __keyWord;
