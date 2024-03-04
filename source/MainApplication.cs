@@ -9,38 +9,52 @@ public class MainApplication{
 
     private static List<ITextSource> __textSources = new List<ITextSource>();
     public static void Main(string[] args){
+        MainApplication mainApp = new();
         bool isValid = true;
-            do{
-                try{
-                int userNumSources = NumSourcesInput();
-                int counter = 0;
-                do{
-                    AddSource();
-                    counter++;
-                }
-                while(counter < userNumSources);
-                
-                bool userContinueSearch;
-                do{
-                    SearchKeyWord();
-                    string userWantToContinue = ContinueInput();
-                    userContinueSearch = userWantToContinue.Equals("Y", StringComparison.OrdinalIgnoreCase);
-                }
-                while(userContinueSearch);
+        do{
+            try{
+                mainApp.AddSources();
+                mainApp.CommenceSearches();
+                Console.WriteLine("Goodbye!");
                 isValid = false;
-                }
-                catch (FormatException){
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Invalid Input.. let's restart");
-                }
-                catch (ArgumentException e){
-                    Console.WriteLine(e.Message);
-                }
-                Console.ResetColor();
-
-            }     
-        while(isValid);
+            }
+            catch (FormatException){
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input.. let's try again");
+            }
+            catch (ArgumentException e){
+                Console.Write(e.Message);
+            }
+            Console.ResetColor();
+            Console.WriteLine();
+        }while(isValid);
     }
+
+    public MainApplication(){
+        Console.WriteLine("Welcome to WordSearcher!");
+    }
+
+    private void AddSources(){
+            int userNumSources = NumSourcesInput();
+            int counter = 0;
+            do{
+                AddSource();
+                counter++;
+            }
+            while(counter < userNumSources);
+    }
+
+    private void CommenceSearches(){
+        bool userContinueSearch;
+        do{
+            SearchKeyWord();
+            string userWantToContinue = ContinueInput();
+            userContinueSearch = userWantToContinue.Equals("Y", StringComparison.OrdinalIgnoreCase);
+        }
+        while(userContinueSearch);
+    }
+
+    
     public static void AddSource(){
         Console.WriteLine("Please enter the number for the source of your text: ");
         Console.WriteLine("1. User Input");
@@ -73,13 +87,16 @@ public class MainApplication{
     }
 
     public static void SearchKeyWord(){
-        Console.WriteLine($" \n What is the keyword you would like to search for?");
+        Console.WriteLine($" \nWhat is the keyword you would like to search for?");
         string userDesire = GetValidInput();
         foreach (ITextSource source in __textSources){
-             WordSearcher searcher = new WordSearcher(source);
-             int occurences = searcher.Search(userDesire);
+
+            WordSearcher searcher = new WordSearcher(source);
+            int occurences = searcher.Search(userDesire);
+
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\n ---------Results---------");
+
             for(int i=0; i<occurences;i++){
                 string result = searcher.FindOccurence(i);
                 if (result.Equals("")){
@@ -89,6 +106,7 @@ public class MainApplication{
                     Console.WriteLine(result);
                 }
             }
+
             Console.ResetColor();
             Console.WriteLine();
         }
@@ -106,7 +124,7 @@ public class MainApplication{
         return input;
     }
 
-    private static int NumSourcesInput(){
+    internal static int NumSourcesInput(){
         Console.WriteLine("How many sources would you like to add?");
         int userNumSources = Convert.ToInt32(GetValidInput());
         if (userNumSources <= 0){
@@ -115,10 +133,10 @@ public class MainApplication{
         return userNumSources;
     }
     
-    private static string ContinueInput(){
+    internal static string ContinueInput(){
         Console.WriteLine("Would you like to continue? (Y) or (N)");
         string answer = GetValidInput();
-        if (!answer.Equals("Y", StringComparison.OrdinalIgnoreCase) || !answer.Equals("N", StringComparison.OrdinalIgnoreCase)){
+        if (!answer.Equals("Y", StringComparison.OrdinalIgnoreCase) && !answer.Equals("N", StringComparison.OrdinalIgnoreCase)){
             throw new ArgumentException("Please enter either Y or N");
         }
         return answer;

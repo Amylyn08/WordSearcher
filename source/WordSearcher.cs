@@ -47,7 +47,6 @@ public class WordSearcher{
         int start = Math.Max(0, index - 15);
         int end = Math.Min(index + Keyword.Length + 15, userText.Length);
         result = userText.Substring(start, end - start);
-        
         return result;
     }
 
