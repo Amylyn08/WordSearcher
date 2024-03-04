@@ -9,23 +9,37 @@ public class MainApplication{
 
     private static List<ITextSource> __textSources = new List<ITextSource>();
     public static void Main(string[] args){
-        Console.WriteLine("Hello, how many sources would you like to add?");
-        int userNumSources = Convert.ToInt32(GetValidInput());
-        int counter = 0;
-        do{
-            AddSource();
-            counter++;
-        }
-        while(counter < userNumSources);
-        
-        bool userContinueSearch;
-        do{
-            SearchKeyWord();
-            Console.WriteLine("Would you like to continue? (Y) or (N)");
-            string userWantToContinue = GetValidInput();
-            userContinueSearch = userWantToContinue.Equals("Y", StringComparison.OrdinalIgnoreCase);
-        }
-        while(userContinueSearch);
+        bool isValid = true;
+            do{
+                try{
+                int userNumSources = NumSourcesInput();
+                int counter = 0;
+                do{
+                    AddSource();
+                    counter++;
+                }
+                while(counter < userNumSources);
+                
+                bool userContinueSearch;
+                do{
+                    SearchKeyWord();
+                    string userWantToContinue = ContinueInput();
+                    userContinueSearch = userWantToContinue.Equals("Y", StringComparison.OrdinalIgnoreCase);
+                }
+                while(userContinueSearch);
+                isValid = false;
+                }
+                catch (FormatException){
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid Input.. let's restart");
+                }
+                catch (ArgumentException e){
+                    Console.WriteLine(e.Message);
+                }
+                Console.ResetColor();
+
+            }     
+        while(isValid);
     }
     public static void AddSource(){
         Console.WriteLine("Please enter the number for the source of your text: ");
@@ -59,14 +73,24 @@ public class MainApplication{
     }
 
     public static void SearchKeyWord(){
-        Console.WriteLine("What is the keyword you would like to search for?");
+        Console.WriteLine($" \n What is the keyword you would like to search for?");
         string userDesire = GetValidInput();
         foreach (ITextSource source in __textSources){
              WordSearcher searcher = new WordSearcher(source);
              int occurences = searcher.Search(userDesire);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n ---------Results---------");
             for(int i=0; i<occurences;i++){
-                Console.WriteLine(searcher.FindOccurence(i));
+                string result = searcher.FindOccurence(i);
+                if (result.Equals("")){
+                    Console.WriteLine("Nothing in the texts matches the keyword you've indicated.");
+                }
+                else{
+                    Console.WriteLine(result);
+                }
             }
+            Console.ResetColor();
+            Console.WriteLine();
         }
     }
 
@@ -80,5 +104,23 @@ public class MainApplication{
             input = Console.ReadLine();
         } while (input == null);
         return input;
+    }
+
+    private static int NumSourcesInput(){
+        Console.WriteLine("How many sources would you like to add?");
+        int userNumSources = Convert.ToInt32(GetValidInput());
+        if (userNumSources <= 0){
+            throw new ArgumentException("Number or sources cannot be less than or equal to 0");
+        }
+        return userNumSources;
+    }
+    
+    private static string ContinueInput(){
+        Console.WriteLine("Would you like to continue? (Y) or (N)");
+        string answer = GetValidInput();
+        if (!answer.Equals("Y", StringComparison.OrdinalIgnoreCase) || !answer.Equals("N", StringComparison.OrdinalIgnoreCase)){
+            throw new ArgumentException("Please enter either Y or N");
+        }
+        return answer;
     }
 }
