@@ -30,24 +30,24 @@ public class WordSearcher{
         return count;
     }
 
-public string FindOccurence(int occurenceToFind)
-{
-    string userText = textSource.ReadText();
-    string result = "";
-    
-    int index = userText.IndexOf(Keyword);
-    for (int i = 0; i < occurenceToFind; i++)
+    public string FindOccurence(int occurenceToFind)
     {
-        index = userText.IndexOf(Keyword, index + Keyword.Length);
-        if (index == -1)
-            return "";
+        string userText = textSource.ReadText();
+        string result = "";
+        
+        int index = userText.IndexOf(Keyword);
+        for (int i = 0; i < occurenceToFind; i++)
+        {
+            index = userText.IndexOf(Keyword, index + Keyword.Length);
+            if (index == -1)
+                return "";
+        }
+        
+        int start = Math.Max(0, index - 15);
+        int end = Math.Min(index + Keyword.Length + 15, userText.Length);
+        result = userText.Substring(start, end - start);
+        
+        return result;
     }
-    
-    int start = Math.Max(0, index - 15);
-    int end = Math.Min(index + Keyword.Length + 15, userText.Length);
-    result = userText.Substring(start, end - start);
-    
-    return result;
-}
 
 }
