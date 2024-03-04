@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
+[assembly: InternalsVisibleTo("WordSearchTest.csproj")]
 namespace WordSearch;
-
 public class MainApplication{
 
     private static List<ITextSource> __textSources = new List<ITextSource>();
@@ -35,7 +37,13 @@ public class MainApplication{
     }
 
     private void AddSources(){
-            int userNumSources = NumSourcesInput();
+            int userNumSources = 0; 
+            do{
+                Console.WriteLine("How many sources would you like to add?");
+                userNumSources = Convert.ToInt32(GetValidInput());
+            }
+            while(NumSourcesInput(userNumSources));
+            
             int counter = 0;
             do{
                 AddSource();
@@ -124,13 +132,11 @@ public class MainApplication{
         return input;
     }
 
-    internal static int NumSourcesInput(){
-        Console.WriteLine("How many sources would you like to add?");
-        int userNumSources = Convert.ToInt32(GetValidInput());
-        if (userNumSources <= 0){
+    internal static bool NumSourcesInput(int numSources){
+        if (numSources <= 0){
             throw new ArgumentException("Number or sources cannot be less than or equal to 0");
         }
-        return userNumSources;
+        return false;
     }
     
     internal static string ContinueInput(){
