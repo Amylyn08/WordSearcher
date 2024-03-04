@@ -1,11 +1,14 @@
 namespace WordSearch;
 public class UserTextSource : ITextSource{
 
-    private String __text;
-    private override String ReadText(){
-        Console.WriteLine("Please enter some text:");
+    private string __text;
+
+    public UserTextSource(){
+        Console.WriteLine("Enter in some text");
         __text = Console.ReadLine();
+
+    }
+    public string ReadText(){
         return __text;
     }
-
 }

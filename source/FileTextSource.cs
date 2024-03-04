@@ -6,7 +6,7 @@ public class FileTextSource : ITextSource{
     public FileTextSource(string path){
         __path = path;
     }
-    public override String ReadText(){
+    public string ReadText(){
         //open the file to read from!!
         return File.ReadAllText(__path);
     }

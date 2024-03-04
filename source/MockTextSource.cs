@@ -1,12 +1,12 @@
 namespace WordSearch;
 public class MockTextSource : ITextSource{
-    private String __text;
-
-    public override String ReadText(){
+    private string __text;
+    public MockTextSource(string textfromuser){
+        __text = textfromuser;
+    }
+    public string ReadText(){
         return __text;
     }
 
-    public MockTextSource(String textfromuser){
-        __text = textfromuser;
-    }
+
 }

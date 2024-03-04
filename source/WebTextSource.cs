@@ -1,17 +1,19 @@
+using System.Net;
+
 namespace WordSearch;
 public class WebTextSource : ITextSource{
 
-    private String __filePath {get; set;}
+    private string __filePath{get; set;}
 
-    public WebTextSource(String filepath){
+    public WebTextSource(string filepath){
         __filePath = filepath;
     }
-    public override String ReadText(){
+    public string ReadText(){
         //Creating a webClient instant 
         WebClient myWebClient = new WebClient();
 
         //Download home page data.
-        Stream myStream = myWebclient.OpenRead(__filePath);
+        Stream myStream = myWebClient.OpenRead(__filePath);
         StreamReader sr = new StreamReader(myStream);
         String dataToString = sr.ReadToEnd();
 

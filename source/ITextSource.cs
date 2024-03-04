@@ -1,4 +1,4 @@
 namespace WordSearch;
-interface ITextSource{
-    String ReadText();
+public interface ITextSource{
+     string ReadText();
 }

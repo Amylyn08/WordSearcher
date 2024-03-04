@@ -10,8 +10,9 @@ public class WordSearcher{
         get => __keyWord;
         set => __keyWord = value;
     }
-    public WordSearch(ITextSource textSource){
+    public WordSearcher(ITextSource textSource){
         __textSource = textSource;
+        __keyWord = "";
     }
 
     public int Search(string keyword){
@@ -25,14 +26,14 @@ public class WordSearcher{
         while ( index != -1){
             count ++;
             //ensures searching does not overlap from eachother. Length+1 prohibits that.
-            index = __textSource.IndexOf(keyword, index + keyword.Length);
+            index = __textSource.ReadText().IndexOf(keyword, index + keyword.Length);
         }
         return count;
     }
 
     public string FindOccurence(int occurenceToFind)
     {
-        string userText = textSource.ReadText();
+        string userText = __textSource.ReadText();
         string result = "";
         
         int index = userText.IndexOf(Keyword);
@@ -51,3 +52,5 @@ public class WordSearcher{
     }
 
 }
+
+//apple pepeee apple pepee papplelkjhflkhasdgkbjsadlnksadfkbjasdflkn
