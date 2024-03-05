@@ -11,15 +11,20 @@ public class MainApplication
 {
 
     private static List<ITextSource> __textSources = new List<ITextSource>();
+
+    //Calls mainapplication.
     public static void Main(string[] args)
     {
         MainApplication mainApp = new();
     }
 
+    //Clears console and commences..
     public MainApplication()
     {
         Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine("Welcome to WordSearcher!");
+        Console.ResetColor();
         while (true)
         {
             AddSources();
@@ -29,6 +34,8 @@ public class MainApplication
         }
     }
 
+    /**sets userNumSources while validating. Allows user to addsource according to their numSources they specified.
+    Also validates input..**/
     private static void AddSources()
     {
         while (true)
@@ -66,6 +73,8 @@ public class MainApplication
         }
 
     }
+
+    /**Uses searchKeyWord() and askes if user would like to continue. Validates as well.**/
     private static void CommenceSearches()
     {
         while (true)
@@ -97,7 +106,7 @@ public class MainApplication
 
     }
 
-
+    /**Allows user to add the type of source according to the input they entered**/
     public static void AddSource()
     {
         Console.WriteLine("Please enter the number for the source of your text: ");
@@ -130,6 +139,7 @@ public class MainApplication
         __textSources.Add(source);
     }
 
+    /**Uses Search() from Wordsearcher class to get occurences num and loop through and print occurences using FindOcuurence()**/
     public static void SearchKeyWord()
     {
         Console.WriteLine($" \nWhat is the keyword you would like to search for?");
@@ -173,6 +183,8 @@ public class MainApplication
         return input;
     }
 
+
+    //Valides user num input. Throws
     internal static bool NumSourcesInput(int numSources)
     {
         if (numSources <= 0)
@@ -181,7 +193,7 @@ public class MainApplication
         }
         return true;
     }
-
+    //Validates user string input, Ys and Ns only. Throws 
     internal static bool ContinueInput(string input)
     {
         if (!input.Equals("Y", StringComparison.OrdinalIgnoreCase) && !input.Equals("N", StringComparison.OrdinalIgnoreCase))
