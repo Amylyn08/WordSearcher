@@ -7,62 +7,99 @@ using System.Security.Cryptography.X509Certificates;
 
 [assembly: InternalsVisibleTo("WordSearchTest")]
 namespace WordSearch;
-public class MainApplication{
+public class MainApplication
+{
 
     private static List<ITextSource> __textSources = new List<ITextSource>();
-    public static void Main(string[] args){
+    public static void Main(string[] args)
+    {
         MainApplication mainApp = new();
-        bool isValid = true;
-        do{
-            try{
-                mainApp.AddSources();
-                mainApp.CommenceSearches();
-                Console.WriteLine("Goodbye!");
-                isValid = false;
+    }
+
+    public MainApplication()
+    {
+        Console.Clear();
+        Console.WriteLine("Welcome to WordSearcher!");
+        while (true)
+        {
+            AddSources();
+            CommenceSearches();
+            Console.WriteLine("Goodbye!");
+            break;
+        }
+    }
+
+    private static void AddSources()
+    {
+        while (true)
+        {
+            try
+            {
+                int userNumSources = 0;
+                do
+                {
+                    Console.WriteLine("How many sources would you like to add?");
+                    userNumSources = Convert.ToInt32(GetValidInput());
+                }
+                while (!NumSourcesInput(userNumSources));
+                int counter = 0;
+
+                do
+                {
+                    AddSource();
+                    counter++;
+                }
+                while (counter < userNumSources);
+                break;
             }
-            catch (FormatException){
+            catch (FormatException)
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid input.. let's try again");
             }
-            catch (ArgumentException e){
+            catch (ArgumentException e)
+            {
                 Console.Write(e.Message);
             }
             Console.ResetColor();
             Console.WriteLine();
-        }while(isValid);
-    }
-
-    public MainApplication(){
-        Console.WriteLine("Welcome to WordSearcher!");
-    }
-
-    private void AddSources(){
-            int userNumSources = 0; 
-            do{
-                Console.WriteLine("How many sources would you like to add?");
-                userNumSources = Convert.ToInt32(GetValidInput());
-            }
-            while(!NumSourcesInput(userNumSources));
-            int counter = 0;
-            do{
-                AddSource();
-                counter++;
-            }
-            while(counter < userNumSources);
-    }
-
-    private void CommenceSearches(){
-        string userWantToContinue = "Y";
-        do{
-            SearchKeyWord();
-            Console.WriteLine("Would you like to continue? (Y) or (N)");
-            userWantToContinue= GetValidInput();
         }
-        while(!ContinueInput(userWantToContinue));
+
+    }
+    private static void CommenceSearches()
+    {
+        while (true)
+        {
+            try
+            {
+                string userWantToContinue = "Y";
+                do
+                {
+                    SearchKeyWord();
+                    Console.WriteLine("Would you like to continue? (Y) or (N)");
+                    userWantToContinue = GetValidInput();
+                }
+                while (!ContinueInput(userWantToContinue));
+                break;
+            }
+            catch (FormatException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid input.. let's try again");
+            }
+            catch (ArgumentException e)
+            {
+                Console.Write(e.Message);
+            }
+            Console.ResetColor();
+            Console.WriteLine();
+        }
+
     }
 
-    
-    public static void AddSource(){
+
+    public static void AddSource()
+    {
         Console.WriteLine("Please enter the number for the source of your text: ");
         Console.WriteLine("1. User Input");
         Console.WriteLine("2. Website");
@@ -93,10 +130,12 @@ public class MainApplication{
         __textSources.Add(source);
     }
 
-    public static void SearchKeyWord(){
+    public static void SearchKeyWord()
+    {
         Console.WriteLine($" \nWhat is the keyword you would like to search for?");
         string userDesire = GetValidInput();
-        foreach (ITextSource source in __textSources){
+        foreach (ITextSource source in __textSources)
+        {
 
             WordSearcher searcher = new WordSearcher(source);
             int occurences = searcher.Search(userDesire);
@@ -104,12 +143,15 @@ public class MainApplication{
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\n ---------Results---------");
 
-            for(int i=0; i<occurences;i++){
+            for (int i = 0; i < occurences; i++)
+            {
                 string result = searcher.FindOccurence(i);
-                if (result.Equals("")){
+                if (result.Equals(""))
+                {
                     Console.WriteLine("Nothing in the texts matches the keyword you've indicated.");
                 }
-                else{
+                else
+                {
                     Console.WriteLine(result);
                 }
             }
@@ -131,18 +173,22 @@ public class MainApplication{
         return input;
     }
 
-    internal static bool NumSourcesInput(int numSources){
-        if (numSources <= 0){
+    internal static bool NumSourcesInput(int numSources)
+    {
+        if (numSources <= 0)
+        {
             throw new ArgumentException("Number or sources cannot be less than or equal to 0");
         }
         return true;
     }
-    
-    internal static bool ContinueInput(string input){
-        if (!input.Equals("Y", StringComparison.OrdinalIgnoreCase) && !input.Equals("N", StringComparison.OrdinalIgnoreCase)){
+
+    internal static bool ContinueInput(string input)
+    {
+        if (!input.Equals("Y", StringComparison.OrdinalIgnoreCase) && !input.Equals("N", StringComparison.OrdinalIgnoreCase))
+        {
             throw new ArgumentException("Please enter either Y or N");
         }
-        if(input.Equals("N", StringComparison.OrdinalIgnoreCase)) return true;
+        if (input.Equals("N", StringComparison.OrdinalIgnoreCase)) return true;
         else return false;
     }
 }

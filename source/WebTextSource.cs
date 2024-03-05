@@ -15,7 +15,7 @@ public class WebTextSource : ITextSource{
         //Download home page data.
         Stream myStream = myWebClient.OpenRead(__filePath);
         StreamReader sr = new StreamReader(myStream);
-        String dataToString = sr.ReadToEnd();
+        string dataToString = sr.ReadToEnd();
 
         myStream.Close();
         

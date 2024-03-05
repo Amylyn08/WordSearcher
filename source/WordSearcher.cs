@@ -6,6 +6,8 @@ public class WordSearcher{
 
     //representing last word searched for
     private string __keyWord;
+
+    //getter and setter 
     public string Keyword{
         get => __keyWord;
         set => __keyWord = value;
@@ -15,6 +17,8 @@ public class WordSearcher{
         __keyWord = "";
     }
 
+    /**This method reads text, acquires keyword, goes in a while loop and iterates count everytime IndexOf finds a keyword in the text. 
+        Quits the while loop when index is -1, and returns count of how many occurences there is. **/
     public int Search(string keyword){
         string userText = __textSource.ReadText();
         __keyWord = keyword;
@@ -31,6 +35,8 @@ public class WordSearcher{
         return count;
     }
 
+    /** Uses loop with int occurenceToFind to set the index to the occurence that user wants. Returns empty if nothing is found. 
+    sets a start and and end range to create a substring to return, subtracting start from end to get range for substring **/
     public string FindOccurence(int occurenceToFind)
     {
         string userText = __textSource.ReadText();
@@ -45,6 +51,7 @@ public class WordSearcher{
         }
         
         int start = Math.Max(0, index - 15);
+        //making sure it doesn't surpass the textlength.
         int end = Math.Min(index + Keyword.Length + 15, userText.Length);
         result = userText.Substring(start, end - start);
         return result;
