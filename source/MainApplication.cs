@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
-[assembly: InternalsVisibleTo("WordSearchTest.csproj")]
+[assembly: InternalsVisibleTo("WordSearchTest")]
 namespace WordSearch;
 public class MainApplication{
 
@@ -42,8 +42,7 @@ public class MainApplication{
                 Console.WriteLine("How many sources would you like to add?");
                 userNumSources = Convert.ToInt32(GetValidInput());
             }
-            while(NumSourcesInput(userNumSources));
-            
+            while(!NumSourcesInput(userNumSources));
             int counter = 0;
             do{
                 AddSource();
@@ -53,13 +52,13 @@ public class MainApplication{
     }
 
     private void CommenceSearches(){
-        bool userContinueSearch;
+        string userWantToContinue = "Y";
         do{
             SearchKeyWord();
-            string userWantToContinue = ContinueInput();
-            userContinueSearch = userWantToContinue.Equals("Y", StringComparison.OrdinalIgnoreCase);
+            Console.WriteLine("Would you like to continue? (Y) or (N)");
+            userWantToContinue= GetValidInput();
         }
-        while(userContinueSearch);
+        while(!ContinueInput(userWantToContinue));
     }
 
     
@@ -136,15 +135,14 @@ public class MainApplication{
         if (numSources <= 0){
             throw new ArgumentException("Number or sources cannot be less than or equal to 0");
         }
-        return false;
+        return true;
     }
     
-    internal static string ContinueInput(){
-        Console.WriteLine("Would you like to continue? (Y) or (N)");
-        string answer = GetValidInput();
-        if (!answer.Equals("Y", StringComparison.OrdinalIgnoreCase) && !answer.Equals("N", StringComparison.OrdinalIgnoreCase)){
+    internal static bool ContinueInput(string input){
+        if (!input.Equals("Y", StringComparison.OrdinalIgnoreCase) && !input.Equals("N", StringComparison.OrdinalIgnoreCase)){
             throw new ArgumentException("Please enter either Y or N");
         }
-        return answer;
+        if(input.Equals("N", StringComparison.OrdinalIgnoreCase)) return true;
+        else return false;
     }
 }
